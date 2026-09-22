@@ -1,31 +1,21 @@
-const detail = document.querySelector('#mechanismDetail');
-const mechanismCopy = {
-  fusion: ['Action Fusion','Before: edit → 모델 호출 → test. After: edit 도구에 then_run 같은 후속 실행을 묶어, 자명한 중간 판단 호출을 제거합니다.','edit + test → 한 계약'],
-  compact: ['Online Context Compact','Before: 끝난 하위 작업도 매 호출마다 계속 전송. After: 앞으로 절약될 입력 토큰이 cache rewrite 비용보다 클 때만 맥락을 정리합니다.','오래된 맥락 → 이득일 때만 압축'],
-  pack: ['ObservationPack','Before: 30 KB 출력이 다음 요청마다 재전송. After: 원문은 로컬에 보존하고 stable handle + 작은 excerpt만 전달하며 필요하면 exact recall 합니다.','큰 값 복사 → 참조 전달'],
-  reducer: ['Evidence-Preserving Reducer','Before: 비싼 주 모델이 긴 build/test log 전체를 읽음. After: 싼 보조 모델이 증거를 추출하고 schema·hash·exit status·exact quote를 결정론적으로 검증합니다.','cheap reader + deterministic verifier']
+const figures = {
+  1:{title:'논문 전체 주장',body:'하네스 자동 최적화가 동일 모델의 token/cost를 줄일 수 있다는 전체 개요입니다.',note:'큰 비용 절감 숫자에는 native Codex/Claude Code 대비 값도 포함됩니다. Pi baseline 대비 full-stack 비용 감소는 약 33%입니다.'},
+  2:{title:'평가 누수 방지',body:'search → freeze → held-out 평가를 분리해 benchmark에 맞춘 반복 튜닝을 제한합니다.',note:'held-out 결과를 다시 search loop에 넣지 않는 것이 핵심입니다.'},
+  3:{title:'535개 실행 환경',body:'495개 실제 GitHub issue/PR 기반 환경과 40개 verifier 기반 환경으로 구성됩니다.',note:'정답 문자열 하나가 아니라 실행 가능한 해결 여부를 평가합니다.'},
+  4:{title:'네 가지 메커니즘',body:'Action Fusion, Context Compact, ObservationPack, Reducer가 서로 다른 낭비를 줄입니다.',note:'이 페이지의 4개 카드가 Figure 4를 초보자용으로 재구성한 것입니다.'},
+  5:{title:'20-agent swarm',body:'동일 초기 상태에서 SoL-Pi swarm이 Pi swarm보다 낮은 비용과 더 나은 결과를 보인 사례입니다.',note:'configuration당 2시간 run 1회이므로 강한 통계적 일반화는 어렵습니다.'},
+  6:{title:'모델마다 다른 작동',body:'GPT-5.6 Sol과 Opus 5에서 같은 메커니즘의 trigger rate와 intensity가 다릅니다.',note:'좋은 하네스의 효과는 model × harness 상호작용으로 봐야 합니다.'},
+  7:{title:'중복과 보완',body:'full stack에서는 일부 메커니즘 activation이 줄어 앞단 메커니즘이 일을 대신하는 패턴이 보입니다.',note:'“시너지 입증”보다는 complementarity와 양립한다고 읽는 편이 정확합니다.'},
+  8:{title:'Action Fusion 발견 과정',body:'trajectory 분석 → 병목 가설 → 구현 → 반복 수정으로 Action Fusion이 만들어진 과정을 보여줍니다.',note:'149 turns 절감은 final benchmark 실측이 아니라 full-triggering counterfactual projection입니다.'}
 };
 
-document.querySelectorAll('.mechanism').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.mechanism').forEach(x => x.classList.remove('active','after'));
-    card.classList.add('active','after');
-    const [title, body, tag] = mechanismCopy[card.dataset.mech];
-    detail.innerHTML = `<div><span class="detail-tag">AFTER</span><h3>${title}</h3><p>${body}</p><p><b>${tag}</b></p></div>`;
-    if(card.dataset.mech==='fusion') card.querySelector('.mini-viz').innerHTML='<span>edit</span><i> + then_run → </i><span>test</span>';
-    if(card.dataset.mech==='pack') card.querySelector('.mini-viz').innerHTML='<span>30 KB 원문</span><i>→ handle →</i><span>≈ 1 KB excerpt</span>';
-    if(card.dataset.mech==='reducer') card.querySelector('.mini-viz').innerHTML='<span>로그</span><i>→ verified →</i><span>증거 receipt</span>';
+const detail = document.querySelector('#figureDetail');
+document.querySelectorAll('.figure-selector button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.figure-selector button').forEach(x => x.classList.remove('active'));
+    button.classList.add('active');
+    const id = button.dataset.fig;
+    const f = figures[id];
+    detail.innerHTML = `<div><span>Figure ${id}</span><h3>${f.title}</h3><p>${f.body}</p></div><aside><b>읽을 때 주의</b><p>${f.note}</p></aside>`;
   });
 });
-
-const metricStage = document.querySelector('#metricStage');
-const metricViews = {
-  efficiency: `<div class="metric-copy"><div class="metric-badge">GPT-5.6 Sol · EdgeBench</div><h3>Pi → SoL-Pi 전체 4개 장치</h3><p>토큰과 비용은 크게 줄지만 점수도 조금 내려갑니다. 따라서 <b>“같은 성능으로 절반 비용”은 아닙니다.</b></p></div><div class="metric-bars"><div class="metric"><span>Tokens</span><div class="bar-bg"><i style="width:100%"></i></div><b>2.1538B</b><em>Pi</em></div><div class="metric accent"><span>Tokens</span><div class="bar-bg"><i style="width:51%"></i></div><b>1.0990B</b><em>SoL-Pi · −49.0%</em></div><div class="metric"><span>Score</span><div class="bar-bg score"><i style="width:100%"></i></div><b>44.833</b><em>Pi</em></div><div class="metric accent"><span>Score</span><div class="bar-bg score"><i style="width:93.7%"></i></div><b>42.003</b><em>93.7% retained</em></div></div>`,
-  performance: `<div class="metric-copy"><div class="metric-badge">GPT-5.6 Sol · EdgeBench</div><h3>Pi → ObservationPack 단독</h3><p>최고 성능 operating point는 full stack이 아니라 <b>단일 메커니즘</b>입니다. 이 설정에서는 토큰을 줄이면서 점수도 올라갔습니다.</p></div><div class="metric-bars"><div class="metric"><span>Tokens</span><div class="bar-bg"><i style="width:100%"></i></div><b>2.1538B</b><em>Pi</em></div><div class="metric accent"><span>Tokens</span><div class="bar-bg"><i style="width:93.9%"></i></div><b>2.0224B</b><em>−6.1%</em></div><div class="metric"><span>Score</span><div class="bar-bg score"><i style="width:94.97%"></i></div><b>44.833</b><em>Pi</em></div><div class="metric accent"><span>Score</span><div class="bar-bg score"><i style="width:100%"></i></div><b>47.208</b><em>+5.3%</em></div></div>`
-};
-
-document.querySelectorAll('.mode-switch button').forEach(btn => btn.addEventListener('click', () => {
-  document.querySelectorAll('.mode-switch button').forEach(x => x.classList.remove('active'));
-  btn.classList.add('active');
-  metricStage.innerHTML = metricViews[btn.dataset.mode];
-}));
