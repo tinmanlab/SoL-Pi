@@ -11,15 +11,42 @@ const figures = {
 
 const detail = document.querySelector('#figureDetail');
 const image = document.querySelector('#figureImage');
+const buttons = [...document.querySelectorAll('.figure-selector button')];
+const cache = {};
+let requestId = 0;
 
-document.querySelectorAll('.figure-selector button').forEach(button => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('.figure-selector button').forEach(x => x.classList.remove('active'));
-    button.classList.add('active');
+const loadFigure = id => {
+  if (cache[id]) return cache[id];
+  const img = new Image();
+  const promise = new Promise((resolve, reject) => {
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+  });
+  img.src = `./assets/figures/fig${id}-guide.svg`;
+  cache[id] = {img, promise};
+  return cache[id];
+};
+
+// Preload all eight redraws as soon as the page is parsed.
+Object.keys(figures).forEach(loadFigure);
+
+buttons.forEach(button => {
+  button.addEventListener('click', async () => {
     const id = button.dataset.fig;
     const f = figures[id];
-    image.src = `./assets/figures/fig${id}-guide.svg`;
-    image.alt = `Figure ${id}을 초보자용으로 재구성한 흐름도`;
+    const ticket = ++requestId;
+
+    buttons.forEach(x => x.classList.toggle('active', x === button));
+    image.classList.add('loading');
     detail.innerHTML = `<div><span>Figure ${id}</span><h3>${f.title}</h3><p>${f.body}</p></div><aside><b>읽을 때 주의</b><p>${f.note}</p><a id="figureSource" href="https://arxiv.org/pdf/2609.20519#page=${f.page}" target="_blank" rel="noopener">원 논문 Figure 보기 ↗</a></aside>`;
+
+    try {
+      await loadFigure(id).promise;
+      if (ticket !== requestId) return;
+      image.src = loadFigure(id).img.src;
+      image.alt = `Figure ${id}을 초보자용으로 재구성한 흐름도`;
+    } finally {
+      if (ticket === requestId) image.classList.remove('loading');
+    }
   });
 });

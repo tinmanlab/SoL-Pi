@@ -46,3 +46,6 @@ footer{max-width:var(--max);margin:auto;display:flex;gap:18px;padding:28px 22px 
 .figure-layout .figure-detail{grid-template-columns:1fr;align-content:start;margin:0}.figure-layout .figure-detail aside{margin-top:8px}.figure-detail aside a{display:inline-block;margin-top:12px;color:var(--mint);font-size:12px;font-weight:800}
 @media(max-width:860px){.story-layout,.figure-layout{grid-template-columns:1fr}.visible-overview{max-width:720px;margin:auto}.figure-visual img{min-height:0}}
 @media(max-width:540px){.visible-overview figcaption{display:block}.visible-overview figcaption span{display:block;margin-top:3px}}
+
+.figure-visual img{transition:opacity .16s ease}.figure-visual img.loading{opacity:.35}
+@media(prefers-reduced-motion:reduce){.figure-visual img{transition:none}}
