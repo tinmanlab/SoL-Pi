@@ -32,11 +32,17 @@
   </div>
 </section>
 <section class="section" id="story">
-  <div class="section-title"><span>01</span><div><p>30초 이해</p><h2>무엇을 줄였나?</h2></div></div>
-  <div class="story-grid">
-    <article><b>1</b><h3>기존 agent</h3><p>수정 후 테스트처럼 자명한 일에도 LLM을 다시 부르고, 긴 로그와 지난 대화를 반복 전송합니다.</p></article>
-    <article><b>2</b><h3>SoL-Pi</h3><p>반복 행동은 하네스로 옮기고, 큰 출력은 참조화하며, 오래된 맥락은 이득일 때만 정리합니다.</p></article>
-    <article><b>3</b><h3>목표</h3><p>지능을 줄이는 것이 아니라 <strong>비싼 지능을 불필요하게 호출하는 순간</strong>을 줄입니다.</p></article>
+  <div class="section-title"><span>01</span><div><p>30초 이해</p><h2>그림부터 보고 핵심만 잡기</h2></div></div>
+  <div class="story-layout">
+    <figure class="visible-overview">
+      <a href="./assets/solpi-image25-overview.webp" target="_blank" rel="noopener"><img src="./assets/solpi-image25-overview.webp" alt="SoL-Pi 전체 구조를 한눈에 정리한 Image 2.5 교육용 인포그래픽" /></a>
+      <figcaption><b>Image 2.5 재구성</b><span>기본 화면에 항상 표시 · 클릭하면 원본 크기로 확대</span></figcaption>
+    </figure>
+    <div class="story-stack">
+      <article><b>1</b><div><h3>기존 agent</h3><p>자명한 일에도 LLM을 다시 부르고, 긴 로그와 지난 대화를 반복 전송합니다.</p></div></article>
+      <article><b>2</b><div><h3>SoL-Pi</h3><p>반복 행동은 하네스로 옮기고, 큰 출력은 참조화하며, 오래된 맥락은 이득일 때만 정리합니다.</p></div></article>
+      <article><b>3</b><div><h3>목표</h3><p><strong>비싼 지능을 불필요하게 호출하는 순간</strong>을 줄입니다.</p></div></article>
+    </div>
   </div>
   <div class="scale-strip">
     <div><strong>152</strong><span>연구 방향</span></div>
@@ -76,10 +82,16 @@
     <button class="active" data-fig="1">1</button><button data-fig="2">2</button><button data-fig="3">3</button><button data-fig="4">4</button>
     <button data-fig="5">5</button><button data-fig="6">6</button><button data-fig="7">7</button><button data-fig="8">8</button>
   </div>
-  <article class="figure-detail" id="figureDetail">
-    <div><span>Figure 1</span><h3>논문 전체 주장</h3><p>하네스 자동 최적화가 동일 모델의 token/cost를 줄일 수 있다는 전체 개요입니다.</p></div>
-    <aside><b>읽을 때 주의</b><p>그림의 큰 비용 절감 수치에는 native Codex/Claude Code 대비 값도 포함됩니다. Pi baseline 대비 full-stack 비용 감소는 약 33%입니다.</p></aside>
-  </article>
+  <div class="figure-layout">
+    <figure class="figure-visual">
+      <img id="figureImage" src="./assets/figures/fig1-guide.svg" alt="Figure 1을 초보자용으로 재구성한 흐름도" />
+      <figcaption>원 논문 Figure를 그대로 복제하지 않은 <b>자체 재도식</b></figcaption>
+    </figure>
+    <article class="figure-detail" id="figureDetail">
+      <div><span>Figure 1</span><h3>논문 전체 주장</h3><p>하네스 자동 최적화가 동일 모델의 token/cost를 줄일 수 있다는 전체 개요입니다.</p></div>
+      <aside><b>읽을 때 주의</b><p>그림의 큰 비용 절감 수치에는 native Codex/Claude Code 대비 값도 포함됩니다. Pi baseline 대비 full-stack 비용 감소는 약 33%입니다.</p><a id="figureSource" href="https://arxiv.org/pdf/2609.20519#page=1" target="_blank" rel="noopener">원 논문 Figure 보기 ↗</a></aside>
+    </article>
+  </div>
 </section>
 <section class="section" id="limits">
   <div class="section-title"><span>05</span><div><p>Claim boundary</p><h2>어디까지 믿어도 되는가?</h2></div></div>
@@ -88,12 +100,6 @@
     <article class="caution"><span>제한적</span><h3>다른 모델에도 일부 전이</h3><p>Sol에서 찾은 메커니즘이 Opus 5에서도 작동했지만, 모든 모델·코드베이스에 일반화됐다고 보기는 이릅니다.</p></article>
     <article class="stop"><span>미증명</span><h3>강한 의미의 RSI</h3><p>weight 자기개선, 계속 가속되는 compounding RSI, harness-pretraining scaling law는 아직 증명되지 않았습니다.</p></article>
   </div>
-
-  <details class="poster-details">
-    <summary>Image 2.5 전체 포스터 보기 <span>선택 자료</span></summary>
-    <p>이 이미지는 교육용 재구성입니다. 작은 글자나 배치가 근거가 되지 않도록 중요한 숫자는 위 HTML에 다시 표기했습니다.</p>
-    <img src="./assets/solpi-image25-overview.webp" alt="SoL-Pi 전체 구조를 정리한 Image 2.5 교육용 인포그래픽" loading="lazy" />
-  </details>
 
   <div class="sources">
     <a href="https://arxiv.org/abs/2609.20519"><b>Paper</b><span>arXiv:2609.20519 ↗</span></a>
