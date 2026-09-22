@@ -11,7 +11,7 @@
 <body>
   <header class="topbar">
     <a class="brand" href="#top" aria-label="SoL-Pi easy guide home"><span class="brand-mark">π</span><span>SoL-Pi Easy Guide</span></a>
-    <nav><a href="#idea">핵심 아이디어</a><a href="#four">4가지 장치</a><a href="#numbers">실험 결과</a><a href="#limits">한계</a></nav>
+    <nav><a href="#overview">한눈에 보기</a><a href="#four">4가지 장치</a><a href="#numbers">실험 결과</a><a href="#figure-map">Figure 1–8</a><a href="#limits">한계</a></nav>
     <a class="ghost-link" href="https://github.com/NVlabs/SoL-Pi">Upstream ↗</a>
   </header>
 
@@ -31,6 +31,14 @@
         <div class="flow-arrow">↓</div>
         <div class="tool-row"><div>📄<small>Files</small></div><div>⌨️<small>Shell</small></div><div>🧪<small>Tests</small></div><div>📚<small>Context</small></div></div>
       </div>
+    </section>
+
+    <section class="section overview-poster" id="overview">
+      <div class="section-head"><span class="step">00</span><div><p class="kicker">IMAGE 2.5 · ONE-PAGE MAP</p><h2>먼저 논문 전체를 한 장으로 보기</h2><p>아래 이미지는 이 논문의 구조를 초보자용으로 다시 그린 비공식 시각 해설입니다. 숫자는 논문 보고값을 사용하지만, 배치와 비유는 이 가이드의 재구성입니다.</p></div></div>
+      <figure class="poster-frame">
+        <img src="./assets/solpi-image25-overview.webp" alt="SoL-Pi 전체 구조와 네 메커니즘, 연구 과정, 실험 결과를 한 장으로 정리한 Image 2.5 인포그래픽" />
+        <figcaption><b>읽는 순서:</b> 같은 LLM → 기존 낭비 → 4개 메커니즘 → auto-research loop → benchmark → 한계. 작은 글자는 아래 인터랙티브 섹션에서 다시 풀어 설명합니다.</figcaption>
+      </figure>
     </section>
 
     <section class="section analogy" id="idea">
@@ -72,6 +80,11 @@
         <div class="metric-bars"><div class="metric"><span>Tokens</span><div class="bar-bg"><i style="width:100%"></i></div><b>2.1538B</b><em>Pi</em></div><div class="metric accent"><span>Tokens</span><div class="bar-bg"><i style="width:51%"></i></div><b>1.0990B</b><em>SoL-Pi · −49.0%</em></div><div class="metric"><span>Score</span><div class="bar-bg score"><i style="width:100%"></i></div><b>44.833</b><em>Pi</em></div><div class="metric accent"><span>Score</span><div class="bar-bg score"><i style="width:93.7%"></i></div><b>42.003</b><em>93.7% retained</em></div></div>
       </div>
       <div class="warning-card"><b>⚠️ 자주 생기는 오해</b><p>논문 Figure 1의 약 50% 비용 절감은 <strong>native Codex 대비</strong> 수치입니다. 같은 Pi baseline 대비 full-stack 비용 감소는 약 <strong>33.2%</strong>입니다.</p></div>
+      <div class="model-compare">
+        <article><span class="model-tag">GPT-5.6 Sol</span><h3>ObservationPack이 최고 score</h3><strong>+5.3%</strong><p>score 상승과 함께 tokens −6.1%, cost −5.1%.</p></article>
+        <article><span class="model-tag">Opus 5</span><h3>Action Fusion이 최고 score</h3><strong>+12.8%</strong><p>score 상승과 함께 tokens −11.3%, cost −7.8%.</p></article>
+        <div class="compare-note"><b>왜 다르지?</b><p>같은 하네스라도 모델이 만드는 trajectory가 다릅니다. Figure 6의 trigger rate/intensity 차이가 이를 보여줍니다. 즉 최적점은 <code>model × harness</code>의 상호작용입니다.</p></div>
+      </div>
     </section>
 
     <section class="section rsi">
@@ -84,18 +97,32 @@
       <div class="evidence-grid"><article class="evidence strong"><span>강함</span><h3>실험이 직접 보여준 것</h3><ul><li>하네스가 같은 모델의 비용·토큰·점수를 크게 바꿀 수 있음</li><li>4개 메커니즘이 executable benchmark에서 실제 작동</li><li>GPT-5.6 Sol에서 찾은 메커니즘이 Opus 5에도 일부 전이</li></ul></article><article class="evidence medium"><span>제한적</span><h3>흥미롭지만 더 필요한 것</h3><ul><li>모든 모델·코드베이스에 같은 효과가 나는지</li><li>20-agent swarm 결과의 반복 재현성</li><li>자동 harness search가 인간 설계보다 항상 우월한지</li></ul></article><article class="evidence weak"><span>미증명</span><h3>아직 미래 연구인 것</h3><ul><li>재귀적 개선이 계속 가속되는 compounding RSI</li><li>Harness pretraining의 scaling law</li><li>성능 손실 없는 보편적 2× efficiency</li></ul></article></div>
     </section>
 
+    <section class="section figure-map" id="figure-map">
+      <div class="section-head"><span class="step">07</span><div><p class="kicker">PAPER FIGURE MAP</p><h2>Figure 1–8은 각각 무엇을 증명하려 하나?</h2><p>논문 그림을 “예쁜 그림”이 아니라 주장-증거 지도처럼 읽습니다.</p></div></div>
+      <div class="figure-grid">
+        <article><b>Fig. 1</b><h3>전체 주장</h3><p>하네스 자동 최적화가 비용·토큰을 줄일 수 있다는 논문 전체 개요.</p><span>주의: 큰 비용 절감 숫자는 native agent 대비 수치도 포함.</span></article>
+        <article><b>Fig. 2</b><h3>평가 누수 방지</h3><p>search → freeze → held-out 평가를 분리해 benchmark 맞춤 튜닝을 제한.</p><span>핵심: 결과를 다시 search에 먹이지 않음.</span></article>
+        <article><b>Fig. 3</b><h3>535개 환경</h3><p>495개 실제 repo issue/PR 기반 + 40개 verifier 기반 문제 구성.</p><span>정답 문자열이 아니라 실행 가능성으로 평가.</span></article>
+        <article><b>Fig. 4</b><h3>4개 메커니즘</h3><p>Action Fusion, Compact, ObservationPack, Reducer가 서로 다른 병목을 공격.</p><span>이 페이지의 핵심 인터랙션과 1:1 대응.</span></article>
+        <article><b>Fig. 5</b><h3>20-agent swarm</h3><p>동일 초기 상태에서 SoL-Pi swarm이 더 적은 비용과 더 나은 결과를 보인 사례.</p><span>제한: configuration당 2시간 run 1회.</span></article>
+        <article><b>Fig. 6</b><h3>모델마다 다름</h3><p>같은 메커니즘도 GPT-5.6 Sol과 Opus 5에서 trigger rate/intensity가 다름.</p><span>결론: model × harness 상호작용.</span></article>
+        <article><b>Fig. 7</b><h3>중복과 보완</h3><p>full stack에서 일부 메커니즘 activation이 줄어 서로 앞단에서 일을 대신함.</p><span>“시너지 증명”보다는 complementarity와 양립.</span></article>
+        <article><b>Fig. 8</b><h3>발견 과정</h3><p>Action Fusion이 trajectory 분석 → 구현 → 반복 수정으로 만들어진 과정.</p><span>149 turns 절감은 full-triggering counterfactual projection.</span></article>
+      </div>
+    </section>
+
     <section class="section glossary">
-      <div class="section-head"><span class="step">07</span><div><p class="kicker">초보자 용어 사전</p><h2>이 다섯 단어만 알면 논문이 읽힌다</h2></div></div>
+      <div class="section-head"><span class="step">08</span><div><p class="kicker">초보자 용어 사전</p><h2>이 다섯 단어만 알면 논문이 읽힌다</h2></div></div>
       <div class="glossary-grid"><div><b>Model</b><span>생각하고 문장을 생성하는 “두뇌”</span></div><div><b>Harness</b><span>두뇌가 도구를 쓰도록 둘러싼 실행 환경</span></div><div><b>Trajectory</b><span>에이전트가 문제를 푸는 동안 남긴 행동 기록</span></div><div><b>Held-out</b><span>개선 과정에서 답을 보지 않은 최종 시험 문제</span></div><div><b>Pareto frontier</b><span>성능과 비용 사이에서 어느 쪽도 쉽게 버릴 수 없는 최선의 선택지들</span></div></div>
     </section>
 
     <section class="section build-note">
-      <div><p class="kicker">IMAGE 2.5 · SITE NOTE</p><h2>이 가이드도 계속 교정합니다</h2><p>설명 자체가 검증 가능하도록 논문 원문·공식 저장소와 연결하고, 초보자가 막히는 지점은 시각자료와 인터랙션으로 계속 교체합니다. 아래 그림은 이 fork의 GitHub Pages 제작 흐름을 Image 2.5로 만든 보조 자료입니다.</p></div>
-      <img src="./assets/image2.5-pages-build-guide.webp" alt="Image 2.5로 만든 GitHub Pages 제작 흐름 인포그래픽" loading="lazy" />
+      <div><p class="kicker">HOW TO READ THIS GUIDE</p><h2>그림은 쉽게, 근거는 더 엄격하게</h2><p>Image 2.5 그림은 이해를 돕는 <strong>교육용 재구성</strong>입니다. 성능 수치·실험 규모·메커니즘 설명은 논문에 맞추고, 그림 속 비유·아이콘·레이아웃은 원 논문의 공식 Figure가 아닙니다. 숫자가 중요한 곳은 항상 HTML 텍스트로 다시 표기해 이미지 생성 오류가 근거가 되지 않게 했습니다.</p></div>
+      <div class="source-boundary"><span>논문 원문</span><b>→</b><span>검증된 숫자/메커니즘</span><b>→</b><span>쉬운 비유·시각화</span></div>
     </section>
 
     <section class="section sources">
-      <div class="section-head"><span class="step">08</span><div><p class="kicker">PRIMARY SOURCES</p><h2>직접 확인하기</h2></div></div>
+      <div class="section-head"><span class="step">09</span><div><p class="kicker">PRIMARY SOURCES</p><h2>직접 확인하기</h2></div></div>
       <div class="source-list"><a href="https://arxiv.org/abs/2609.20519"><b>Paper</b><span>arXiv:2609.20519</span><i>↗</i></a><a href="https://github.com/NVlabs/SoL-Pi"><b>Official code</b><span>NVlabs/SoL-Pi</span><i>↗</i></a><a href="https://github.com/tinmanlab/SoL-Pi"><b>This fork</b><span>tinmanlab/SoL-Pi</span><i>↗</i></a></div>
       <p class="caption">이 페이지는 논문을 쉽게 설명하기 위한 비공식 교육용 해설입니다. “논문이 보고한 결과”와 “이 페이지의 쉬운 비유/재구성”을 구분해서 읽어주세요.</p>
     </section>
