@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="SoL-Pi 논문을 초보자도 이해할 수 있게 시각적으로 분해한 한국어 가이드" />
+  <meta name="theme-color" content="#07101f" />
+  <title>SoL-Pi, 10분 만에 이해하기</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="SoL-Pi easy guide home"><span class="brand-mark">π</span><span>SoL-Pi Easy Guide</span></a>
+    <nav><a href="#idea">핵심 아이디어</a><a href="#four">4가지 장치</a><a href="#numbers">실험 결과</a><a href="#limits">한계</a></nav>
+    <a class="ghost-link" href="https://github.com/NVlabs/SoL-Pi">Upstream ↗</a>
+  </header>
+
+  <main id="top">
+    <section class="hero section">
+      <div class="hero-copy">
+        <div class="eyebrow">ARXIV:2609.20519 · BEGINNER VISUAL GUIDE</div>
+        <h1>더 똑똑한 AI가 아니라,<br><em>AI가 일하는 방식을</em> 고친다.</h1>
+        <p class="lead">SoL-Pi는 새 LLM이 아닙니다. 강력한 모델은 그대로 두고, 그 모델이 파일을 읽고·수정하고·테스트하고·로그를 기억하는 <strong>하네스(harness)</strong>를 더 효율적으로 바꾼 연구입니다.</p>
+        <div class="hero-actions"><a class="btn primary" href="#idea">그림으로 시작하기 ↓</a><a class="btn" href="https://arxiv.org/abs/2609.20519">논문 원문 ↗</a></div>
+        <div class="truth-strip"><span>모델 weight 변경</span><b>✕</b><span>하네스 개선</span><b>✓</b><span>무손실 2배 성능</span><b>✕</b></div>
+      </div>
+      <div class="hero-visual" aria-label="SoL-Pi concept diagram">
+        <div class="brain card-node"><span>🧠</span><b>Frontier LLM</b><small>두뇌는 그대로</small></div>
+        <div class="flow-arrow">↓</div>
+        <div class="harness card-node glow"><span>🧰</span><b>SoL-Pi Harness</b><small>반복·전달·기억 낭비를 줄임</small></div>
+        <div class="flow-arrow">↓</div>
+        <div class="tool-row"><div>📄<small>Files</small></div><div>⌨️<small>Shell</small></div><div>🧪<small>Tests</small></div><div>📚<small>Context</small></div></div>
+      </div>
+    </section>
+
+    <section class="section analogy" id="idea">
+      <div class="section-head"><span class="step">01</span><div><p class="kicker">가장 먼저 이해할 것</p><h2>문제는 “생각”만 비싼 게 아니다</h2></div></div>
+      <div class="analogy-grid">
+        <article class="panel bad"><div class="panel-label">기존 에이전트</div><h3>매번 상사에게 다시 묻는다</h3>
+          <div class="timeline"><div class="event llm">LLM 호출 <span>비싼 판단</span></div><div class="connector">↓</div><div class="event tool">파일 수정 <span>edit</span></div><div class="connector">↓</div><div class="event llm pulse">LLM 호출 <span>“이제 테스트할까?”</span></div><div class="connector">↓</div><div class="event tool">테스트 <span>pytest</span></div><div class="connector">↓</div><div class="event log">긴 로그 <span>30 KB</span></div><div class="connector">↓</div><div class="event llm pulse">LLM 호출 <span>로그를 또 전송</span></div></div>
+        </article>
+        <article class="panel good"><div class="panel-label">SoL-Pi 관점</div><h3>자명한 반복은 하네스가 처리한다</h3>
+          <div class="timeline compact"><div class="event llm">LLM 호출 <span>진짜 판단</span></div><div class="connector">↓</div><div class="event harness-event">수정 → 바로 테스트 <span>Action Fusion</span></div><div class="connector">↓</div><div class="event harness-event">큰 로그는 참조/증거로 축약 <span>Pack + Reducer</span></div><div class="connector">↓</div><div class="event llm">LLM 호출 <span>필요한 정보만</span></div></div>
+          <div class="takeaway">핵심: <b>비싼 지능을 없애는 것이 아니라, 비싼 지능을 부를 이유가 없는 순간을 없앤다.</b></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="four">
+      <div class="section-head"><span class="step">02</span><div><p class="kicker">논문의 실질적 결과</p><h2>살아남은 4가지 메커니즘</h2><p>카드를 눌러 Before → After를 바꿔보세요.</p></div></div>
+      <div class="mechanism-grid">
+        <button class="mechanism" data-mech="fusion"><span class="num">1</span><div class="icon">⛓️</div><h3>Action Fusion</h3><p>연속해서 할 게 뻔한 작업을 한 번의 도구 계약으로 묶는다.</p><div class="mini-viz"><span>edit</span><i>→ LLM →</i><span>test</span></div><small>클릭해서 After 보기</small></button>
+        <button class="mechanism" data-mech="compact"><span class="num">2</span><div class="icon">🗜️</div><h3>Online Context Compact</h3><p>끝난 작업의 긴 맥락을, 경제적으로 이득일 때만 압축한다.</p><div class="bars"><i style="--h:95%"></i><i style="--h:80%"></i><i style="--h:65%"></i><i style="--h:50%"></i></div><small>클릭해서 After 보기</small></button>
+        <button class="mechanism" data-mech="pack"><span class="num">3</span><div class="icon">📦</div><h3>ObservationPack</h3><p>큰 출력을 매번 복사하지 않고 원문은 저장한 채 참조로 전달한다.</p><div class="mini-viz"><span>30 KB</span><i>→→→</i><span>30 KB</span></div><small>클릭해서 After 보기</small></button>
+        <button class="mechanism" data-mech="reducer"><span class="num">4</span><div class="icon">🔎</div><h3>Evidence-Preserving Reducer</h3><p>싼 모델이 로그에서 증거를 뽑되, 기계적 검증을 통과해야 쓴다.</p><div class="mini-viz"><span>로그</span><i>→ cheap LLM →</i><span>요약?</span></div><small>클릭해서 After 보기</small></button>
+      </div>
+      <div class="mechanism-detail" id="mechanismDetail" aria-live="polite"><div><span class="detail-tag">TIP</span><h3>네 장치는 서로 다른 낭비를 공격합니다.</h3><p>Action Fusion은 <b>불필요한 호출</b>, Compact는 <b>오래된 기억</b>, ObservationPack은 <b>큰 데이터의 반복 운반</b>, Reducer는 <b>비싼 모델의 단순 읽기</b>를 줄입니다.</p></div></div>
+    </section>
+
+    <section class="section research-loop">
+      <div class="section-head"><span class="step">03</span><div><p class="kicker">진짜 연구적 포인트</p><h2>사람이 4개를 찍은 게 아니라, 실행 흔적에서 찾아냈다</h2></div></div>
+      <div class="loop-track"><div class="loop-node"><b>① 실행</b><span>Agent trajectory</span></div><div class="arr">→</div><div class="loop-node"><b>② 관찰</b><span>낭비/병목 탐색</span></div><div class="arr">→</div><div class="loop-node"><b>③ 가설</b><span>개선안 생성</span></div><div class="arr">→</div><div class="loop-node"><b>④ 구현</b><span>Harness 수정</span></div><div class="arr">→</div><div class="loop-node"><b>⑤ 검증</b><span>실행 benchmark</span></div></div>
+      <div class="scale-cards"><div><strong>152</strong><span>시작 연구 방향</span></div><div><strong>535</strong><span>search environments</span></div><div><strong>3,000+</strong><span>runs</span></div><div><strong>60,000+</strong><span>agent–environment interactions</span></div></div>
+      <p class="caption">논문 보고 수치. 큰 탐색 규모는 강점이지만, “탐색량을 2배 늘리면 품질이 얼마나 좋아지는가”라는 scaling law까지 증명한 것은 아닙니다.</p>
+    </section>
+
+    <section class="section" id="numbers">
+      <div class="section-head"><span class="step">04</span><div><p class="kicker">숫자를 과장 없이 읽기</p><h2>“49% 절감”의 정확한 뜻</h2></div></div>
+      <div class="mode-switch" role="tablist"><button class="active" data-mode="efficiency">Full stack · Efficiency</button><button data-mode="performance">Best single mechanism · Performance</button></div>
+      <div class="metric-stage" id="metricStage">
+        <div class="metric-copy"><div class="metric-badge">GPT-5.6 Sol · EdgeBench</div><h3>Pi → SoL-Pi 전체 4개 장치</h3><p>토큰과 비용은 크게 줄지만 점수도 조금 내려갑니다. 따라서 <b>“같은 성능으로 절반 비용”은 아닙니다.</b></p></div>
+        <div class="metric-bars"><div class="metric"><span>Tokens</span><div class="bar-bg"><i style="width:100%"></i></div><b>2.1538B</b><em>Pi</em></div><div class="metric accent"><span>Tokens</span><div class="bar-bg"><i style="width:51%"></i></div><b>1.0990B</b><em>SoL-Pi · −49.0%</em></div><div class="metric"><span>Score</span><div class="bar-bg score"><i style="width:100%"></i></div><b>44.833</b><em>Pi</em></div><div class="metric accent"><span>Score</span><div class="bar-bg score"><i style="width:93.7%"></i></div><b>42.003</b><em>93.7% retained</em></div></div>
+      </div>
+      <div class="warning-card"><b>⚠️ 자주 생기는 오해</b><p>논문 Figure 1의 약 50% 비용 절감은 <strong>native Codex 대비</strong> 수치입니다. 같은 Pi baseline 대비 full-stack 비용 감소는 약 <strong>33.2%</strong>입니다.</p></div>
+    </section>
+
+    <section class="section rsi">
+      <div class="section-head"><span class="step">05</span><div><p class="kicker">RSI를 오해하지 않기</p><h2>“AI가 스스로 진화했다”는 뜻은 아니다</h2></div></div>
+      <div class="rsi-grid"><article class="panel crossed"><h3>❌ 이 논문이 하지 않은 것</h3><div class="stack"><span>LLM weights</span><span>↓ 자기 재학습</span><span>더 똑똑한 LLM</span><span>↓ 무한 반복</span></div><p>모델 weight를 스스로 바꾸거나 능력이 폭발적으로 증가한 실험이 아닙니다.</p></article><article class="panel"><h3>✓ 실제로 한 것</h3><div class="stack good-stack"><span>고정 LLM</span><span>↓ trajectory</span><span>하네스 분석·수정</span><span>↓ 더 효율적인 실행</span></div><p>그래서 논문도 강한 RSI가 아니라 <strong>RSI-inspired</strong> framing을 사용합니다.</p></article></div>
+    </section>
+
+    <section class="section" id="limits">
+      <div class="section-head"><span class="step">06</span><div><p class="kicker">증거의 경계</p><h2>어디까지 믿어도 되는가?</h2></div></div>
+      <div class="evidence-grid"><article class="evidence strong"><span>강함</span><h3>실험이 직접 보여준 것</h3><ul><li>하네스가 같은 모델의 비용·토큰·점수를 크게 바꿀 수 있음</li><li>4개 메커니즘이 executable benchmark에서 실제 작동</li><li>GPT-5.6 Sol에서 찾은 메커니즘이 Opus 5에도 일부 전이</li></ul></article><article class="evidence medium"><span>제한적</span><h3>흥미롭지만 더 필요한 것</h3><ul><li>모든 모델·코드베이스에 같은 효과가 나는지</li><li>20-agent swarm 결과의 반복 재현성</li><li>자동 harness search가 인간 설계보다 항상 우월한지</li></ul></article><article class="evidence weak"><span>미증명</span><h3>아직 미래 연구인 것</h3><ul><li>재귀적 개선이 계속 가속되는 compounding RSI</li><li>Harness pretraining의 scaling law</li><li>성능 손실 없는 보편적 2× efficiency</li></ul></article></div>
+    </section>
+
+    <section class="section glossary">
+      <div class="section-head"><span class="step">07</span><div><p class="kicker">초보자 용어 사전</p><h2>이 다섯 단어만 알면 논문이 읽힌다</h2></div></div>
+      <div class="glossary-grid"><div><b>Model</b><span>생각하고 문장을 생성하는 “두뇌”</span></div><div><b>Harness</b><span>두뇌가 도구를 쓰도록 둘러싼 실행 환경</span></div><div><b>Trajectory</b><span>에이전트가 문제를 푸는 동안 남긴 행동 기록</span></div><div><b>Held-out</b><span>개선 과정에서 답을 보지 않은 최종 시험 문제</span></div><div><b>Pareto frontier</b><span>성능과 비용 사이에서 어느 쪽도 쉽게 버릴 수 없는 최선의 선택지들</span></div></div>
+    </section>
+
+    <section class="section build-note">
+      <div><p class="kicker">IMAGE 2.5 · SITE NOTE</p><h2>이 가이드도 계속 교정합니다</h2><p>설명 자체가 검증 가능하도록 논문 원문·공식 저장소와 연결하고, 초보자가 막히는 지점은 시각자료와 인터랙션으로 계속 교체합니다. 아래 그림은 이 fork의 GitHub Pages 제작 흐름을 Image 2.5로 만든 보조 자료입니다.</p></div>
+      <img src="./assets/image2.5-pages-build-guide.webp" alt="Image 2.5로 만든 GitHub Pages 제작 흐름 인포그래픽" loading="lazy" />
+    </section>
+
+    <section class="section sources">
+      <div class="section-head"><span class="step">08</span><div><p class="kicker">PRIMARY SOURCES</p><h2>직접 확인하기</h2></div></div>
+      <div class="source-list"><a href="https://arxiv.org/abs/2609.20519"><b>Paper</b><span>arXiv:2609.20519</span><i>↗</i></a><a href="https://github.com/NVlabs/SoL-Pi"><b>Official code</b><span>NVlabs/SoL-Pi</span><i>↗</i></a><a href="https://github.com/tinmanlab/SoL-Pi"><b>This fork</b><span>tinmanlab/SoL-Pi</span><i>↗</i></a></div>
+      <p class="caption">이 페이지는 논문을 쉽게 설명하기 위한 비공식 교육용 해설입니다. “논문이 보고한 결과”와 “이 페이지의 쉬운 비유/재구성”을 구분해서 읽어주세요.</p>
+    </section>
+  </main>
+
+  <footer><b>SoL-Pi Easy Guide</b><span>Beginner-first · evidence-aware · continuously corrected</span><a href="#top">맨 위로 ↑</a></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
